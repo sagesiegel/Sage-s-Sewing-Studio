@@ -19,18 +19,6 @@ if (year) {
   year.textContent = new Date().getFullYear();
 }
 
-/*
-Connect the buttons on the homepage to the new course page.
-*/
-document
-  .querySelectorAll(".hero .button-primary, .course-action .button")
-  .forEach((link) => {
-    link.setAttribute("href", "course.html");
-  });
-
-/*
-Display course progress saved by future interactive lesson pages.
-*/
 const completedLessons = JSON.parse(
   localStorage.getItem("sageCompletedLessons") || "[]"
 );
@@ -43,7 +31,8 @@ if (completedCount) {
 }
 
 if (progressBar) {
-  progressBar.style.width = `${(completedLessons.length / 13) * 100}%`;
+  progressBar.style.width =
+    `${(completedLessons.length / 13) * 100}%`;
 }
 
 completedLessons.forEach((lessonNumber) => {
