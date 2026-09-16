@@ -3,12 +3,20 @@ const navigation = document.querySelector(".site-nav");
 
 menuButton?.addEventListener("click", () => {
   const isOpen = navigation.classList.toggle("open");
-  menuButton.setAttribute("aria-expanded", String(isOpen));
+
+  menuButton.setAttribute(
+    "aria-expanded",
+    String(isOpen)
+  );
 });
 
 navigation?.addEventListener("click", () => {
   navigation.classList.remove("open");
-  menuButton?.setAttribute("aria-expanded", "false");
+
+  menuButton?.setAttribute(
+    "aria-expanded",
+    "false"
+  );
 });
 
 const year = document.querySelector("#year");
@@ -17,25 +25,66 @@ if (year) {
   year.textContent = new Date().getFullYear();
 }
 
-/* Connect homepage buttons to the course page. */
+/*
+Connect the homepage buttons to the course page.
+*/
 
 document
-  .querySelectorAll(".hero .button-primary, .course-action .button")
+  .querySelectorAll(
+    ".hero .button-primary, .course-action .button"
+  )
   .forEach((link) => {
     link.setAttribute("href", "course.html");
   });
 
-/* Display saved course progress. */
+/*
+Connect each Start button to its lesson page.
+*/
+
+const lessonPageLinks = {
+  1: "lesson1.html",
+  2: "lesson2.html",
+  3: "lesson3.html",
+  4: "lesson4.html",
+  5: "lesson.html"
+};
+
+document
+  .querySelectorAll(".lesson-row[data-lesson]")
+  .forEach((row) => {
+    const lessonNumber = Number(row.dataset.lesson);
+    const startLink = row.querySelector("a");
+
+    if (
+      startLink &&
+      lessonPageLinks[lessonNumber]
+    ) {
+      startLink.setAttribute(
+        "href",
+        lessonPageLinks[lessonNumber]
+      );
+    }
+  });
+
+/*
+Display saved course progress.
+*/
 
 const completedLessons = JSON.parse(
-  localStorage.getItem("sageCompletedLessons") || "[]"
+  localStorage.getItem(
+    "sageCompletedLessons"
+  ) || "[]"
 );
 
-const completedCount = document.querySelector("#completed-count");
-const progressBar = document.querySelector("#course-progress-bar");
+const completedCount =
+  document.querySelector("#completed-count");
+
+const progressBar =
+  document.querySelector("#course-progress-bar");
 
 if (completedCount) {
-  completedCount.textContent = completedLessons.length;
+  completedCount.textContent =
+    completedLessons.length;
 }
 
 if (progressBar) {
@@ -45,13 +94,18 @@ if (progressBar) {
 
 completedLessons.forEach((lessonNumber) => {
   document
-    .querySelector(`[data-lesson="${lessonNumber}"]`)
+    .querySelector(
+      `[data-lesson="${lessonNumber}"]`
+    )
     ?.classList.add("completed");
 });
 
-/* Interactive lesson pages. */
+/*
+Interactive lesson-page controls.
+*/
 
-const lessonContent = document.querySelector("#lesson-content");
+const lessonContent =
+  document.querySelector("#lesson-content");
 
 const lessonSteps = [
   ...document.querySelectorAll(".lesson-step")
@@ -65,7 +119,8 @@ const activeLessonId = Number(
   document.body.dataset.lessonId || 5
 );
 
-const savedStepKey = `sageLesson${activeLessonId}Step`;
+const savedStepKey =
+  `sageLesson${activeLessonId}Step`;
 
 let currentStep = Number(
   localStorage.getItem(savedStepKey) || 1
@@ -85,13 +140,25 @@ function showLessonStep(step) {
     const isCurrent =
       Number(item.dataset.step) === currentStep;
 
-    item.classList.toggle("active", isCurrent);
+    item.classList.toggle(
+      "active",
+      isCurrent
+    );
   });
 
-  const label = document.querySelector("#step-label");
-  const fill = document.querySelector("#lesson-progress-fill");
-  const previous = document.querySelector("#previous-step");
-  const next = document.querySelector("#next-step");
+  const label =
+    document.querySelector("#step-label");
+
+  const fill =
+    document.querySelector(
+      "#lesson-progress-fill"
+    );
+
+  const previous =
+    document.querySelector("#previous-step");
+
+  const next =
+    document.querySelector("#next-step");
 
   if (label) {
     label.textContent =
@@ -104,7 +171,8 @@ function showLessonStep(step) {
   }
 
   if (previous) {
-    previous.disabled = currentStep === 1;
+    previous.disabled =
+      currentStep === 1;
   }
 
   if (next) {
@@ -169,10 +237,14 @@ document
   .querySelector("#complete-lesson")
   ?.addEventListener("click", () => {
     const savedLessons = JSON.parse(
-      localStorage.getItem("sageCompletedLessons") || "[]"
+      localStorage.getItem(
+        "sageCompletedLessons"
+      ) || "[]"
     );
 
-    if (!savedLessons.includes(activeLessonId)) {
+    if (
+      !savedLessons.includes(activeLessonId)
+    ) {
       savedLessons.push(activeLessonId);
     }
 
@@ -181,17 +253,23 @@ document
       JSON.stringify(savedLessons)
     );
 
-    window.location.href = "course.html#lessons";
+    window.location.href =
+      "course.html#lessons";
   });
 
 if (lessonSteps.length) {
   showLessonStep(currentStep);
 
   if (
-    localStorage.getItem("sageLessonView") === "full"
+    localStorage.getItem(
+      "sageLessonView"
+    ) === "full"
   ) {
     viewButtons
-      .find((button) => button.dataset.view === "full")
+      .find(
+        (button) =>
+          button.dataset.view === "full"
+      )
       ?.click();
   }
 }
